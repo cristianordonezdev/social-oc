@@ -3,6 +3,7 @@ import 'bootstrap';
 import './assets/main.scss'
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import 'bootstrap-icons/font/bootstrap-icons.css'
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
