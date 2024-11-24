@@ -1,5 +1,24 @@
 <script setup lang="ts">
+import { useAuthStore } from '@/stores/auth.store';
+import type { ILogin } from '@/interfaces/login';
+import { Form as VeeForm, Field as VeeField} from 'vee-validate';
+import * as Yup from 'yup';
 
+const schema = Yup.object().shape({
+    username: Yup.string().required('Email is required').email("Must be a valid email address"),
+    password: Yup.string().required('Password is required')
+});
+
+const loginAction : any = (values: { username: any; password: any; }, { setErrors }: any) => {
+    const authStore = useAuthStore();
+    const { username, password } = values;
+    const data: ILogin = {
+      email: username,
+      password: password
+    }
+    return authStore.login(data)
+      .catch(error => setErrors({ apiError: error }));
+}
 </script>
 
 <template>
@@ -8,20 +27,20 @@
       <h1 class="text-center">Sign in</h1>
       <p class="text-center mb-4">Don't have an account? <a href="">Click here to sign up</a></p>
 
-
-      <form>
+      <vee-form class="form-login" @submit="loginAction" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
         <div class="mb-3">
-          <input type="email" class="form-control" placeholder="name@example.com">
+          <vee-field name="username" type="text" class="form-control" :class="{ 'is-invalid': errors.username }" placeholder="cuenta@cuenta.com"/>
+          <div class="invalid-feedback">{{errors.username}}</div>
         </div>
+
         <div class="mb-3">
-          <input type="password" class="form-control" id="inputPassword">
+          <vee-field name="password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" placeholder="••••••••"/>
+          <div class="invalid-feedback">{{errors.password}}</div>
         </div>
         <a href="" class="float-end mb-3">Forgot password?</a>
-
-        <button type="button" class="btn btn-primary w-100 mb-3">Login</button>
+        <button type="submit" class="btn btn-primary w-100 mb-3" :disabled="isSubmitting">Login</button>
         <p class="text-center mb-0">2024. All rights reserved</p>
-
-      </form>
+      </vee-form>
     </div>
   </section>
 </template>
