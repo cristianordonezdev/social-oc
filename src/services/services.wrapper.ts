@@ -13,12 +13,12 @@ export const services_wrapper = {
 };
 
 function request(method: string) {
-    return async (url: string, body: FormData | {} = {}) => {
+    return async (url: string, body: FormData | {} | string = {}) => {
         const requestOptions: any = {
             method,
             headers: await authHeader(`${base_url}${url}`)
         };
-
+        if (typeof body === 'string') requestOptions.headers['Conversation-Token'] = body;
         if (body instanceof FormData) {
             if (method === 'POST') requestOptions.body = body;
         } else {

@@ -1,18 +1,19 @@
 <script setup lang="ts">
-import { RouterLink, RouterView } from 'vue-router'
+import { RouterView } from 'vue-router'
 import NavbarComponent from './components/NavbarComponent.vue';
+import { isAuthenticated } from './utils/auth';
 
 </script>
 
 <template>
   <header>
 
-    <div class="wrapper ">
+    <div class="wrapper" v-if="isAuthenticated()">
       <navbar-component></navbar-component>
     </div>
   </header>
 
-  <div class="main-container-router-view">
+  <div class="main-container-router-view mt-4">
     <RouterView class="max-1400"/>
   </div>
 </template>
@@ -25,10 +26,9 @@ import NavbarComponent from './components/NavbarComponent.vue';
   height: 100%;
   
   .max-1400 {
-    max-width: 1400px;
+    max-width: 1200px;
     margin: 0 auto;
     height: 100%;
-    padding: 0 1em;
   }
 }
 </style>
